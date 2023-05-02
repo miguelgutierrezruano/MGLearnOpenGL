@@ -124,10 +124,17 @@ int main()
 
     bool running = true;
 
-    float coordinates[6] = {
-        -1.0f,  1.0f,
-         0.0f, -1.0f, 
-         1.0f,  1.0f 
+    float coordinates[] = {
+        -0.5f, -0.5f,
+         0.5f, -0.5f, 
+         0.5f,  0.5f,
+        -0.5f,  0.5f
+    };
+
+    unsigned int indices[] =
+    {
+        0, 1, 2,
+        2, 3, 0
     };
 
     // Create VAO required in core profile
@@ -139,11 +146,17 @@ int main()
     unsigned int buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6, coordinates, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, coordinates, GL_STATIC_DRAW);
 
     // Set up vertex attribute
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
+
+    // Create index buffer on GPU
+    unsigned int ibo;
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, indices, GL_STATIC_DRAW);
 
     // Shader code
     ShaderSource source = ParseShader("../code/shaders/Basic.shader");
@@ -171,7 +184,7 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, nullptr);
 
         window.display();
 
