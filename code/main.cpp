@@ -189,6 +189,12 @@ int main()
     float redChannel = 0.0f;
     float increment = 0.05f;
 
+    // Unbind every buffer
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glUseProgram(0);
+
     do
     {
         Event event;
@@ -207,8 +213,17 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glUseProgram(shader);
         // Set color on main loop
         glUniform4f(location, redChannel, 0.0f, 1.0f, 1.0f);
+
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        
+        // Draw elements
+        GLClearError();
+        glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, nullptr);
+        assert(GLLogCall());
 
         if (redChannel > 1.0f)
             increment = -0.05f;
@@ -216,10 +231,6 @@ int main()
             increment = 0.05f;
 
         redChannel += increment;
-        
-        GLClearError();
-        glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, nullptr);
-        assert(GLLogCall());
 
         window.display();
 
