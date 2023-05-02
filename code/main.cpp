@@ -15,6 +15,22 @@
 
 using namespace sf;
 
+static void GLClearError()
+{
+    while (glGetError() != GL_NO_ERROR);
+}
+
+static bool GLLogCall()
+{
+    while (GLenum error = glGetError())
+    {
+        std::cout << "[OpenGL Error] (" << error << ")" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
 struct ShaderSource
 {
     std::string vertexSource;
@@ -137,7 +153,7 @@ int main()
         2, 3, 0
     };
 
-    // Create VAO required in core profile
+    // Create VAO required in Core Profile
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -158,13 +174,20 @@ int main()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, indices, GL_STATIC_DRAW);
 
-    // Shader code
+    // Parse shader code
     ShaderSource source = ParseShader("../code/shaders/Basic.shader");
 
+    // Compile and use vertex and fragment shader
     unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
     glUseProgram(shader);
 
     glClearColor(0.1f, 0.1f, 0.1f, 1);
+
+    int location = glGetUniformLocation(shader, "u_Color");
+    glUniform4f(location, 1.0f, 0.0f, 1.0f, 1.0f);
+
+    float redChannel = 0.0f;
+    float increment = 0.05f;
 
     do
     {
@@ -184,7 +207,19 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Set color on main loop
+        glUniform4f(location, redChannel, 0.0f, 1.0f, 1.0f);
+
+        if (redChannel > 1.0f)
+            increment = -0.05f;
+        else if (redChannel < 0.0f)
+            increment = 0.05f;
+
+        redChannel += increment;
+        
+        GLClearError();
         glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, nullptr);
+        assert(GLLogCall());
 
         window.display();
 
