@@ -9,8 +9,54 @@
 
 #include <cassert>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 using namespace sf;
+
+struct ShaderSource
+{
+    std::string vertexSource;
+    std::string fragmentSource;
+};
+
+static ShaderSource ParseShader(const std::string& path)
+{
+    // Open file
+    std::ifstream stream(path);
+
+    enum class ShaderType
+    {
+        NONE = -1, VERTEX = 0, FRAGMENT = 1
+    };
+
+    // Declare string where to copy
+    std::stringstream ss[2];
+    ShaderType type = ShaderType::NONE;
+
+    // Read line from file
+    std::string line;
+    while (getline(stream, line))
+    {
+        // If line defines a shader change type
+        if (line.find("#shader") != std::string::npos)
+        {
+            if (line.find("vertex") != std::string::npos)
+                type = ShaderType::VERTEX;
+            else if (line.find("fragment") != std::string::npos)
+                type = ShaderType::FRAGMENT;
+        }
+        // Add line to shader string
+        else
+        {
+            if(type != ShaderType::NONE)
+                ss[(int)type] << line << '\n';
+        }
+    }
+
+    return { ss[0].str(), ss[1].str() };
+}
 
 static unsigned int CompileShader(unsigned int type, const std::string& source)
 {
@@ -64,7 +110,7 @@ static unsigned int CreateShader(const std::string& vertexShaderCode, const std:
 int main()
 {
     // Window with OpenGL context
-    Window window(VideoMode(800, 600), "MGLearnOpenGL", Style::Default, ContextSettings(0, 0, 0, 4, 4, ContextSettings::Core));
+    Window window(VideoMode(800, 600), "MGLearnOpenGL", Style::Default, ContextSettings(0, 0, 0, 3, 3, ContextSettings::Core));
 
     // Glad initialization
     GLenum glad_init = gladLoadGL();
@@ -100,31 +146,9 @@ int main()
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
 
     // Shader code
-    std::string vertexShader =
-        R"glsl(
-        #version 330 core
+    ShaderSource source = ParseShader("../code/shaders/Basic.shader");
 
-        layout(location = 0) in vec4 position;
-
-        void main() 
-        {
-            gl_Position = position;
-        }
-        )glsl";
-
-    std::string fragmentShader =
-        R"glsl(
-        #version 330 core
-
-        out vec4 color;
-
-        void main()
-        {
-            color = vec4(1.0, 0.0, 0.0, 1.0);
-        }
-        )glsl";
-
-    unsigned int shader = CreateShader(vertexShader, fragmentShader);
+    unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
     glUseProgram(shader);
 
     glClearColor(0.1f, 0.1f, 0.1f, 1);

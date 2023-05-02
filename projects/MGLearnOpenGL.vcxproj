@@ -86,6 +86,9 @@
   <ItemGroup>
     <ClCompile Include="..\code\main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\code\shaders\Basic.shader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
