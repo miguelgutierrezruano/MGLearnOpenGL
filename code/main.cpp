@@ -7,6 +7,8 @@
 #include <SFML/Graphics.hpp>
 #include <glad/glad.h>
 
+#include <thread>
+#include <chrono>
 #include <cassert>
 #include <iostream>
 #include <fstream>
@@ -21,6 +23,8 @@
 
 using namespace sf;
 using namespace mg;
+
+using namespace std::chrono;
 
 struct ShaderSource
 {
@@ -179,8 +183,16 @@ int main()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glUseProgram(0);
 
+    // Delta time variables
+    auto  chrono = high_resolution_clock();
+    float target_time = 1.f / 60;
+    float delta_time = target_time;
+
     do
     {
+        // Get time where frame started
+        high_resolution_clock::time_point start = chrono.now();
+
         Event event;
 
         while (window.pollEvent(event))
@@ -211,13 +223,23 @@ int main()
         assert(GLLogCall());
 
         if (redChannel > 1.0f)
-            increment = -0.05f;
+            increment = -0.02f;
         else if (redChannel < 0.0f)
-            increment = 0.05f;
+            increment = 0.02f;
 
         redChannel += increment;
 
         window.display();
+
+        // Compute delta time
+        float elapsed = duration<float>(chrono.now() - start).count();
+
+        if (elapsed < target_time)
+        {
+            std::this_thread::sleep_for(duration<float>(target_time - elapsed));
+        }
+
+        delta_time = duration<float>(chrono.now() - start).count();
 
     } while (running);
 

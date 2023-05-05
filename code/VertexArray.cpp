@@ -42,6 +42,7 @@ namespace mg
 	{
 		glBindVertexArray(id);
 	}
+
 	void VertexArray::unbind()
 	{
 		glBindVertexArray(0);
