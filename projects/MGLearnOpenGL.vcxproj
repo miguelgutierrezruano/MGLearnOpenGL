@@ -55,7 +55,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SFML_STATIC;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\libraries\sfml-2.5.1\include;..\libraries\glad-0.1.34\include;..\code\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libraries\sfml-2.5.1\include;..\libraries\glad-0.1.34\include;..\code\headers;..\libraries\glm-0.9.9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -72,22 +73,33 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SFML_STATIC;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\libraries\sfml-2.5.1\include;..\libraries\glad-0.1.34\include;..\code\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libraries\sfml-2.5.1\include;..\libraries\glad-0.1.34\include;..\code\headers;..\libraries\glm-0.9.9\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\libraries\sfml-2.5.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\libraries\sfml-2.5.1\lib;..\libraries\glad-0.1.34\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glad-release.lib;sfml-main.lib;sfml-system-s.lib;sfml-window-s.lib;sfml-graphics-s.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\code\IndexBuffer.cpp" />
     <ClCompile Include="..\code\main.cpp" />
+    <ClCompile Include="..\code\Renderer.cpp" />
+    <ClCompile Include="..\code\VertexArray.cpp" />
+    <ClCompile Include="..\code\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\code\shaders\Basic.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\code\headers\IndexBuffer.h" />
+    <ClInclude Include="..\code\headers\Renderer.h" />
+    <ClInclude Include="..\code\headers\VertexArray.h" />
+    <ClInclude Include="..\code\headers\VertexBuffer.h" />
+    <ClInclude Include="..\code\headers\VertexBufferLayout.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

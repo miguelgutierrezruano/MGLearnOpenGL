@@ -21,10 +21,39 @@
     <ClCompile Include="..\code\main.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\code\Renderer.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\code\VertexBuffer.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\code\IndexBuffer.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\code\VertexArray.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\code\shaders\Basic.shader">
       <Filter>resources\shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\code\headers\Renderer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\code\headers\VertexBuffer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\code\headers\IndexBuffer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\code\headers\VertexArray.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\code\headers\VertexBufferLayout.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

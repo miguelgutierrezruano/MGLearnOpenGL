@@ -13,23 +13,14 @@
 #include <string>
 #include <sstream>
 
+#include "Renderer.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
+#include "IndexBuffer.h"
+
 using namespace sf;
-
-static void GLClearError()
-{
-    while (glGetError() != GL_NO_ERROR);
-}
-
-static bool GLLogCall()
-{
-    while (GLenum error = glGetError())
-    {
-        std::cout << "[OpenGL Error] (" << error << ")" << std::endl;
-        return false;
-    }
-
-    return true;
-}
+using namespace mg;
 
 struct ShaderSource
 {
@@ -126,7 +117,7 @@ static unsigned int CreateShader(const std::string& vertexShaderCode, const std:
 int main()
 {
     // Window with OpenGL context
-    Window window(VideoMode(800, 600), "MGLearnOpenGL", Style::Default, ContextSettings(0, 0, 0, 3, 3, ContextSettings::Core));
+    Window window(VideoMode(800, 600), "MGLearnOpenGL", Style::Default, ContextSettings(24, 0, 0, 3, 3, ContextSettings::Core));
 
     // Glad initialization
     GLenum glad_init = gladLoadGL();
@@ -153,26 +144,19 @@ int main()
         2, 3, 0
     };
 
-    // Create VAO required in Core Profile
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    // Create VAO 
+    mg::VertexArray vertexArray;
 
     // Create vertex buffer on GPU
-    unsigned int buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, coordinates, GL_STATIC_DRAW);
+    mg::VertexBuffer vertexBuffer(coordinates, 4 * 2 * sizeof(float));
 
-    // Set up vertex attribute
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
+    mg::VertexBufferLayout vertexBufferLayout;
+    vertexBufferLayout.push<float>(2);
+
+    vertexArray.addBuffer(vertexBuffer, vertexBufferLayout);
 
     // Create index buffer on GPU
-    unsigned int ibo;
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, indices, GL_STATIC_DRAW);
+    mg::IndexBuffer indexBuffer(indices, 6);
 
     // Parse shader code
     ShaderSource source = ParseShader("../code/shaders/Basic.shader");
@@ -214,11 +198,12 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shader);
+
         // Set color on main loop
         glUniform4f(location, redChannel, 0.0f, 1.0f, 1.0f);
 
-        glBindVertexArray(VAO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        vertexArray.bind();
+        indexBuffer.bind();
         
         // Draw elements
         GLClearError();
