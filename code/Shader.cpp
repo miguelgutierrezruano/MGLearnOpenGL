@@ -43,6 +43,11 @@ namespace mg
         glUniform4f(getUniformLocation(name), vec.x, vec.y, vec.z, vec.w);
 	}
 
+    void Shader::setUniform1i(const std::string& name, int value)
+    {
+        glUniform1i(getUniformLocation(name), value);
+    }
+
     int Shader::getUniformLocation(const std::string& name)
     {
         if (uniformLocationCache.find(name) != uniformLocationCache.end())

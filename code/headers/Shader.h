@@ -39,6 +39,7 @@ namespace mg
 
 		// Set uniforms
 		void setUniform4f(const std::string& name, glm::vec4 vec);
+		void setUniform1i(const std::string& name, int value);
 
 	private:
 

@@ -85,10 +85,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\code\headers\other\stb_image.cpp" />
     <ClCompile Include="..\code\IndexBuffer.cpp" />
     <ClCompile Include="..\code\main.cpp" />
     <ClCompile Include="..\code\Renderer.cpp" />
     <ClCompile Include="..\code\Shader.cpp" />
+    <ClCompile Include="..\code\Texture.cpp" />
     <ClCompile Include="..\code\VertexArray.cpp" />
     <ClCompile Include="..\code\VertexBuffer.cpp" />
   </ItemGroup>
@@ -97,11 +99,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\code\headers\IndexBuffer.h" />
+    <ClInclude Include="..\code\headers\other\stb_image.h" />
     <ClInclude Include="..\code\headers\Renderer.h" />
     <ClInclude Include="..\code\headers\Shader.h" />
+    <ClInclude Include="..\code\headers\Texture.h" />
     <ClInclude Include="..\code\headers\VertexArray.h" />
     <ClInclude Include="..\code\headers\VertexBuffer.h" />
     <ClInclude Include="..\code\headers\VertexBufferLayout.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\resources\textures\ciri.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

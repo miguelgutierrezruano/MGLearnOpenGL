@@ -22,4 +22,18 @@ namespace mg
 
         return true;
     }
+
+    void Renderer::clear()
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    void Renderer::draw(VertexArray& vertexArray, IndexBuffer& indexBuffer, Shader& shader)
+    {
+        shader.bind();
+        vertexArray.bind();
+        indexBuffer.bind();
+
+        glDrawElements(GL_TRIANGLES, indexBuffer.GetCount(), GL_UNSIGNED_INT, nullptr);
+    }
 }

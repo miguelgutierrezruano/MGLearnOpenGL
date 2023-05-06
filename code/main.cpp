@@ -11,11 +11,9 @@
 #include <chrono>
 #include <cassert>
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
 
 #include "Shader.h"
+#include "Texture.h"
 #include "Renderer.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
@@ -40,15 +38,13 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    window.setVerticalSyncEnabled(true);
-
-    bool running = true;
+    Renderer renderer;
 
     float coordinates[] = {
-        -0.5f, -0.5f,
-         0.5f, -0.5f, 
-         0.5f,  0.5f,
-        -0.5f,  0.5f
+        -0.5f, -0.5f, 0.0f, 0.0f,
+         0.5f, -0.5f, 1.0f, 0.0f,
+         0.5f,  0.5f, 1.0f, 1.0f,
+        -0.5f,  0.5f, 0.0f, 1.0f
     };
 
     unsigned int indices[] =
@@ -61,9 +57,10 @@ int main()
     mg::VertexArray vertexArray;
 
     // Create vertex buffer on GPU
-    mg::VertexBuffer vertexBuffer(coordinates, 4 * 2 * sizeof(float));
+    mg::VertexBuffer vertexBuffer(coordinates, 4 * 4 * sizeof(float));
 
     mg::VertexBufferLayout vertexBufferLayout;
+    vertexBufferLayout.push<float>(2);
     vertexBufferLayout.push<float>(2);
 
     vertexArray.addBuffer(vertexBuffer, vertexBufferLayout);
@@ -75,8 +72,11 @@ int main()
     shader.bind();
     shader.setUniform4f("u_Color", glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
-    glClearColor(0.1f, 0.1f, 0.1f, 1);
+    mg::Texture texture("../resources/textures/ciri.jpg");
+    texture.bind();
+    shader.setUniform1i("u_Texture", 0);
 
+    glClearColor(0.1f, 0.1f, 0.1f, 1);
 
     float redChannel = 0.0f;
     float increment = 0.05f;
@@ -91,6 +91,10 @@ int main()
     auto  chrono = high_resolution_clock();
     float target_time = 1.f / 60;
     float delta_time = target_time;
+
+    window.setVerticalSyncEnabled(true);
+
+    bool running = true;
 
     do
     {
@@ -111,18 +115,12 @@ int main()
             }
         }
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        renderer.clear();
 
-        shader.bind();
+        shader.bind(); 
         shader.setUniform4f("u_Color", glm::vec4(redChannel, 0.0f, 1.0f, 1.0f));
 
-        vertexArray.bind();
-        indexBuffer.bind();
-        
-        // Draw elements
-        GLClearError();
-        glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, nullptr);
-        assert(GLLogCall());
+        renderer.draw(vertexArray, indexBuffer, shader);
 
         if (redChannel > 1.0f)
             increment = -0.01f;

@@ -16,6 +16,15 @@
     <Filter Include="resources\shaders">
       <UniqueIdentifier>{1c5bdb98-47e0-4f77-a25f-f9d95847c01f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resources\textures">
+      <UniqueIdentifier>{c6ad1640-cfd3-4d4a-85a9-2cf21a2eda06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\other">
+      <UniqueIdentifier>{874f8ba7-3811-44ea-a258-20f377bfd4f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\other\stb_image">
+      <UniqueIdentifier>{9f3e8428-d46f-41bc-802f-5aa9863674b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\code\main.cpp">
@@ -34,6 +43,12 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="..\code\Shader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\code\headers\other\stb_image.cpp">
+      <Filter>sources\other\stb_image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\code\Texture.cpp">
       <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -61,5 +76,16 @@
     <ClInclude Include="..\code\headers\Shader.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\code\headers\other\stb_image.h">
+      <Filter>sources\other\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\code\headers\Texture.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\resources\textures\ciri.jpg">
+      <Filter>resources\textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>
