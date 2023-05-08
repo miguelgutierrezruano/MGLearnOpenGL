@@ -48,6 +48,11 @@ namespace mg
         glUniform1i(getUniformLocation(name), value);
     }
 
+    void Shader::setUniformMat4f(const std::string& name, glm::mat4& mat)
+    {
+        glUniformMatrix4fv(getUniformLocation(name), 1, false, &mat[0][0]);
+    }
+
     int Shader::getUniformLocation(const std::string& name)
     {
         if (uniformLocationCache.find(name) != uniformLocationCache.end())

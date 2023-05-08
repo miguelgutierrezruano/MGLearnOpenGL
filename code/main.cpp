@@ -6,6 +6,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <thread>
 #include <chrono>
@@ -28,7 +30,7 @@ using namespace std::chrono;
 int main()
 {
     // Window with OpenGL context
-    Window window(VideoMode(800, 600), "MGLearnOpenGL", Style::Default, ContextSettings(24, 0, 0, 3, 3, ContextSettings::Core));
+    Window window(VideoMode(960, 540), "MGLearnOpenGL", Style::Default, ContextSettings(24, 0, 0, 3, 3, ContextSettings::Core));
 
     // Glad initialization
     GLenum glad_init = gladLoadGL();
@@ -38,13 +40,16 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     Renderer renderer;
 
     float coordinates[] = {
-        -0.5f, -0.5f, 0.0f, 0.0f,
-         0.5f, -0.5f, 1.0f, 0.0f,
-         0.5f,  0.5f, 1.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f, 1.0f
+        100, 100, 0.0f, 0.0f,
+        200, 100, 1.0f, 0.0f,
+        200, 200, 1.0f, 1.0f,
+        100, 200, 0.0f, 1.0f
     };
 
     unsigned int indices[] =
@@ -68,9 +73,13 @@ int main()
     // Create index buffer on GPU
     mg::IndexBuffer indexBuffer(indices, 6);
 
+    // 4/3 projection matrix
+    glm::mat4 projection = glm::ortho(0.f, 960.f, 0.f, 540.f, -1.0f, 1.0f);
+
     mg::Shader shader("../code/shaders/Basic.shader");
     shader.bind();
     shader.setUniform4f("u_Color", glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
+    shader.setUniformMat4f("modelViewProjection", projection);
 
     mg::Texture texture("../resources/textures/ciri.jpg");
     texture.bind();
