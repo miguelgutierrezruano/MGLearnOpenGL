@@ -46,10 +46,10 @@ int main()
     Renderer renderer;
 
     float coordinates[] = {
-        100, 100, 0.0f, 0.0f,
-        200, 100, 1.0f, 0.0f,
-        200, 200, 1.0f, 1.0f,
-        100, 200, 0.0f, 1.0f
+        200, 100, 0.0f, 0.0f,
+        700, 100, 1.0f, 0.0f,
+        700, 400, 1.0f, 1.0f,
+        200, 400, 0.0f, 1.0f
     };
 
     unsigned int indices[] =
